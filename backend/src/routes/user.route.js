@@ -15,6 +15,7 @@ router.route("/refresh-token").post(refreshAccessToken)
 router.route("/change-password").post(verifyJWT, changeCurrentPassword)
 router.route("/update-account").patch(verifyJWT, updateAccountDetails)
 router.route("/avatar").patch(verifyJWT, upload.single("avatar"), updateUserAvatar)
+router.route("/orderHistory").get(verifyJWT, getOrderHistory)
 
 
 export default router;

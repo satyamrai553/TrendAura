@@ -249,6 +249,61 @@ const updateUserAvatar = asyncHandler(async(req,res)=>{
 
 
 
+const getOrderHistory = asyncHandler(async (req, res) => {
+    const userOrders = await User.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(req.user._id),
+        },
+      },
+      {
+        $lookup: {
+          from: "orders", 
+          localField: "_id", 
+          foreignField: "user", 
+          as: "orderHistory", 
+          pipeline: [
+            {
+              $lookup: {
+                from: "products", 
+                localField: "products.product",
+                foreignField: "_id", 
+                as: "productDetails", 
+              },
+            },
+            {
+              $project: {
+                products: 1,
+                totalAmount: 1,
+                orderStatus: 1,
+                paymentStatus: 1,
+                paymentMethod: 1,
+                shippingDate: 1,
+                deliveryDate: 1,
+                orderDate: 1,
+                productDetails: {
+                  _id: 1,
+                  name: 1,
+                  price: 1,
+                  description: 1,
+                  image: 1,
+                },
+              },
+            },
+          ],
+        },
+      },
+    ]);
+  
+    if (!userOrders || userOrders.length === 0) {
+      throw new ErrorResponse(404, "No order found")
+    }
+  
+    return res.status(200).json( 
+        new ApiResponse(200, userOrders, "User order history fetched successfully")
+    )
+  });
+
 
 
 
@@ -257,5 +312,9 @@ export {
     registerUser,
     loginUser,
     logoutUser,
-    refreshAccessToken
+    refreshAccessToken,
+    getOrderHistory,
+    updateAccountDetails,
+    updateUserAvatar,
+    changeCurrentPassword
 }
