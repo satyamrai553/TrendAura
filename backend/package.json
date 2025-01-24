@@ -1,5 +1,5 @@
 {
-  "name": "ecommerce",
+  "name": "trendaura_backend",
   "version": "1.0.0",
   "description": "ecommerece website using MERN stack",
   "main": "src/index.js",
