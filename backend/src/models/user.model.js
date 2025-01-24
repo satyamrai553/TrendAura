@@ -33,7 +33,14 @@ const userSchema = new Schema({
     avatar:{
         type: String,
         required: true,
+        default: "http://linkToUpdate"
     },
+    orderHistory: [
+     {
+          type: Schema.Types.ObjectId,
+          ref: "Order"
+      }
+  ], 
     refreshToken:{
         type: String,
     }
