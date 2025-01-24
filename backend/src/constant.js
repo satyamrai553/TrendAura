@@ -1,1 +1,3 @@
-DB_NAME="ecommerce"
+const DB_NAME="ecommerce"
+
+export {DB_NAME}

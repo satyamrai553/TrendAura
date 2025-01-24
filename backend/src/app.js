@@ -23,10 +23,12 @@ app.use(cookieParser())
 
 
 //import routes
-
+import helathCheckRouter from "./routes/healthCheck.routes.js"
+import userRouter from "./routes/user.route.js";
 
 //routes
-
+app.use("/api/v1/healthCheck", helathCheckRouter)
+app.use("/api/v1/users", userRouter)
 
 export {
     app
