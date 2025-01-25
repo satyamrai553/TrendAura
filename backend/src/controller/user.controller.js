@@ -4,7 +4,7 @@ import { ErrorResponse } from '../utils/ErrorResponse.js'
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from 'jsonwebtoken'
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
-import fs from 'fs'
+
 
 
 
@@ -80,7 +80,7 @@ const loginUser = asyncHandler(async(req, res)=>{
     })
 
     if(!user){
-        throw new ApiErrorResponse(404, "No user found with the provided email or Phone Number");
+        throw new ErrorResponse(404, "No user found with the provided email or Phone Number");
 
     }
 
