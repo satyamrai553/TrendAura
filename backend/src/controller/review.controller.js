@@ -26,9 +26,10 @@ const addReview = asyncHandler(async (req, res) => {
   
     
     const { rating, comment } = req.body;
-    if (!rating) {
-      throw new ErrorResponse(400, "Rating is required!");
+    if (rating === undefined || rating === null || isNaN(rating) || rating < 1 || rating > 5) {
+      throw new ErrorResponse(400, "Rating must be a number between 1 and 5");
     }
+    
   
   
     const review = await Review.create({
@@ -115,13 +116,73 @@ const addReview = asyncHandler(async (req, res) => {
 
 
 
-const deleteReview = asyncHandler(async(req, res)=>{
+  const deleteReview = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user?._id);
+    if (!user) {
+      throw new ErrorResponse(401, "Unauthorized access!");
+    }
   
-})
+    const { reviewId } = req.params;
+  
+    
+    if (!mongoose.Types.ObjectId.isValid(reviewId)) {
+      throw new ErrorResponse(400, "Invalid review ID");
+    }
+  
+    
+    const reviewToDelete = await Review.findOneAndDelete({
+      _id: reviewId,
+      user: user._id, 
+    });
+  
+    if (!reviewToDelete) {
+      throw new ErrorResponse(404, "Review not found or not authorized to delete");
+    }
+  
+    return res.status(200).json(
+      new ApiResponse(200, reviewToDelete, "Review deleted successfully!")
+    );
+  });
 
-const updateReview = asyncHandler(async(req,res)=>{
 
-})
+  const updateReview = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user?._id);
+    if (!user) {
+      throw new ErrorResponse(401, "Unauthorized access!");
+    }
+  
+    const { reviewId } = req.params;
+    const { newRating, newComment } = req.body;
+  
+    
+    if (!mongoose.Types.ObjectId.isValid(reviewId)) {
+      throw new ErrorResponse(400, "Invalid review ID");
+    }
+  
+    if (newRating === undefined || newRating === null || isNaN(newRating) || newRating < 1 || newRating > 5) {
+      throw new ErrorResponse(400, "Rating must be a number between 1 and 5");
+    }
+    
+  
+    if (!newComment || newComment.trim().length === 0) {
+      throw new ErrorResponse(400, "Comment cannot be empty");
+    }
+  
+    const updatedReview = await Review.findOneAndUpdate(
+      { _id: reviewId, user: user._id }, 
+      { rating: newRating, comment: newComment },
+      { new: true } 
+    );
+  
+    if (!updatedReview) {
+      throw new ErrorResponse(404, "Review not found or not authorized to update");
+    }
+  
+    return res.status(200).json(
+      new ApiResponse(200, updatedReview, "Review updated successfully!")
+    );
+  });
+  
   
 
 export {
