@@ -12,7 +12,7 @@ const orderSchema = new Schema(
         product: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
-          required: true, 
+           
         },
         quantity: {
           type: Number,
@@ -21,17 +21,17 @@ const orderSchema = new Schema(
         },
         price: {
           type: Number,
-          required: true, 
+          
         },
       },
     ],
     totalAmount: {
       type: Number,
-      required: true, 
+       
     },
     shippingAddress: {
       type: String,
-      required: true, 
+       
     },
     orderStatus: {
       type: String,
@@ -45,8 +45,7 @@ const orderSchema = new Schema(
     },
     paymentMethod: {
       type: String,
-      enum: ["COD", "UPI", "Internet_Banking"],
-      required: true, 
+      enum: ["COD", "UPI", "Internet_Banking"], 
     },
     shippingDate: {
       type: Date,
