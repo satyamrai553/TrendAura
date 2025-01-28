@@ -10,8 +10,11 @@ import {
   PageNotFound,
   Login,
   Signup,
-  Product,
+  Collection,
   Cart,
+  New,
+  Men,
+  Women
 } from './pages/index.js';
 import {
   Route,
@@ -19,6 +22,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
+
 
 // Define the router with routes
 const router = createBrowserRouter(
@@ -28,11 +32,15 @@ const router = createBrowserRouter(
       <Route index element={<Home />} /> {/* Default route */}
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<Signup />} /> 
+      <Route path="new" element={<New />} /> 
+      <Route path="women" element={<Women />} /> 
+      <Route path="men" element={<Men />} />
       <Route path="about" element={<About />} />
       <Route path="contact" element={<Contact />} />
-      <Route path="product" element={<Product />} /> 
+      <Route path="collection" element={<Collection />} /> 
       <Route path="cart" element={<Cart />} /> 
       <Route path="*" element={<PageNotFound />} /> 
+       
     </Route>
   )
 );
