@@ -11,12 +11,12 @@ const HomePage = () => {
   ];
 
   return (
-    <div className="bg-gray-50">
+    <div className="bg-background_primary">
       {/* Hero Section */}
       <HeroSection />
 
       {/* Featured Products Section */}
-      <section className="container mx-auto py-16">
+      <section className="container mx-auto py-16 bg-background_primary">
         <h2 className="text-4xl font-extrabold text-center text-gray-800 mb-10 tracking-wide">
           Featured Products
         </h2>
@@ -34,6 +34,10 @@ const HomePage = () => {
           ))}
         </div>
       </section>
+
+      <div className="flex justify-center">
+        <img src="https://res.cloudinary.com/dpxkotl1n/image/upload/v1738027918/TrendAura/dmysbdkeelzndlza9cjd.jpg" alt="feature image" className="rounded-2xl w-[1240px]  h-[600px] object-cover"/>
+      </div>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import { Category } from "./category.model";
 
 const productSchema = new Schema(
   {
@@ -27,9 +28,9 @@ const productSchema = new Schema(
       min: [0, "Price cannot be less than 0"],
     },
     category: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: Category,
       required: true,
-      enum: ["electronics", "clothing", "accessories", "home", "beauty"],
     },
     seller: { 
         type: mongoose.Schema.Types.ObjectId, 
