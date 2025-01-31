@@ -1,3 +1,3 @@
-const DB_NAME="ecommerce"
+const DB_NAME="trendaura"
 
 export {DB_NAME}

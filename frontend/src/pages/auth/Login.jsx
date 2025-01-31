@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";  // Import useDispatch
+import { loginSuccess } from "../../redux/authslice.js"; // Import loginSuccess action
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +12,9 @@ const Login = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();  // Initialize dispatch
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -16,11 +22,17 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/auth/login", formData);
+      const response = await axios.post("http://localhost:8000/api/v1/users/login", formData);
       setSuccess("Logged in successfully!");
       setError(null);
       localStorage.setItem("accessToken", response.data.accessToken);
       localStorage.setItem("refreshToken", response.data.refreshToken);
+
+      // Dispatch the login success action to update Redux state
+      dispatch(loginSuccess(response.data.user));  // Pass user data if available
+
+      // Redirect to the desired route
+      navigate("/"); // Redirect to homepage or dashboard
     } catch (err) {
       setError(err.response?.data?.message || "Invalid email or password");
       setSuccess(null);
