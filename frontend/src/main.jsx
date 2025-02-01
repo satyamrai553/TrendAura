@@ -6,7 +6,7 @@ import './index.css';
 import { Home, Contact, About, PageNotFound, Login, Signup, Collection, Cart, New, Men, Women } from './pages/index.js';
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 import { Provider } from 'react-redux'; // Import Provider
-import { store } from './redux/store.js';  // Import the store
+import store  from './store/store.js';  // Import the store
 
 // Define the router with routes
 const router = createBrowserRouter(

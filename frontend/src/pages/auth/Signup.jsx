@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import NotificationBanner from "../../components/NotificationBanner";
+import { Message } from "../../components/index.js";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -112,8 +112,8 @@ const Signup = () => {
       </div>
 
       {/* Show Notifications at the bottom */}
-      {error && <NotificationBanner message={error} type="error" onClose={() => setError(null)} />}
-      {success && <NotificationBanner message={success} type="success" onClose={() => setSuccess(null)} />}
+      {error && <Message message={error} type="error" onClose={() => setError(null)} />}
+      {success && <Message message={success} type="success" onClose={() => setSuccess(null)} />}
     </div>
   );
 };

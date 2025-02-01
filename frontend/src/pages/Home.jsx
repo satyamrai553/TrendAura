@@ -1,6 +1,6 @@
 import React from "react";
-import HeroSection from "../components/HeroSection";
-import ProductCard from "../components/ProductCard";
+import HeroSection from "../components/organism/HeroSection";
+import ProductCard from "../components/molecule/ProductCard";
 
 const HomePage = () => {
   const featuredProducts = [

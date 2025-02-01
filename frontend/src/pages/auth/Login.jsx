@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";  // Import useDispatch
-import { loginSuccess } from "../../redux/authslice.js"; // Import loginSuccess action
+import { login } from "../../store/authSlice"; // Import loginSuccess action
 
 const Login = () => {
   const [formData, setFormData] = useState({
