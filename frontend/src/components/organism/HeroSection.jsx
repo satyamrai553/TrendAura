@@ -1,4 +1,5 @@
 import React from "react";
+import {Button} from "../index";
 
 const HeroSection = () => {
   return (
@@ -11,8 +12,7 @@ const HeroSection = () => {
             in the street, fashion has to do with ideas, the way we live, what is
             happening.</p>
             <div className="pt-6">
-            <button className="bg-text_primary text-white text-xl font-bold rounded-md font-standard p-2">Buy Now</button>
-          
+              <Button type="button" bgColor="bg-text_primary" textColor="text-white" className="text-xl font-bold rounded-md font-standard p-2" children="Buy Now"/>  
             <a href="#" className="ml-2"><u>add to cart</u></a>
             </div>
           

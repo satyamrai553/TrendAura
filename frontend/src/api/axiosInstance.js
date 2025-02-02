@@ -1,12 +1,14 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL : import.meta.env.BASE_URL,
+  baseURL : import.meta.env.VITE_BASE_URL,
+  withCredentials: true
+
 });
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const accessToken = JSON.parse(sessionStorage.getItem("accessToken")) || "";
+    const accessToken = JSON.parse(sessionStorage.getItem("accessToken") || "null") || "";
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }

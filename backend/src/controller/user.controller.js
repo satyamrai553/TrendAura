@@ -97,11 +97,15 @@ const loginUser = asyncHandler(async (req, res) => {
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
 
     const options = {
-        httpOnly: true,
-        secure: true
-    }
-    return res.status(200).cookie("accessToken", accessToken, options)
-        .cookie("refreshToken", refreshToken, options)
+        httpOnly: true, // Prevents JavaScript access (good for security)
+        secure:  true , // Only use secure cookies in production
+        sameSite: "Lax", // Prevents CSRF but allows cross-origin auth
+        maxAge: 7 * 24 * 60 * 60 * 1000, // Cookie expires in 7 days
+      };
+      
+      res.status(200)
+        .cookie("accessToken", accessToken, options) // Set accessToken
+        .cookie("refreshToken", refreshToken, { ...options, httpOnly: true })
         .json(
             new ApiResponse(200, { user: loggedInUser, accessToken, refreshToken }, "User logged In Successfully")
         )
@@ -126,6 +130,12 @@ const logoutUser = asyncHandler(async (req, res) => {
     }
     return res.status(200).clearCookie("accessToken", options).clearCookie("refreshToken", options)
         .json(new ApiResponse(200, {}, "User logged out successfully"))
+})
+
+const getCurrentUser = asyncHandler(async(req, res)=>{
+    return res
+    .status(200)
+    .json(new ApiResponse(200, req.user, "Current user fetched successfully"))
 })
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
@@ -318,5 +328,6 @@ export {
     getOrderHistory,
     updateAccountDetails,
     updateUserAvatar,
-    changeCurrentPassword
+    changeCurrentPassword,
+    getCurrentUser
 }

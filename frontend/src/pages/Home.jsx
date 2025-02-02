@@ -3,6 +3,7 @@ import HeroSection from "../components/organism/HeroSection";
 import ProductCard from "../components/molecule/ProductCard";
 
 const HomePage = () => {
+  
   const featuredProducts = [
     { id: 1, image: "https://via.placeholder.com/300", name: "T-Shirt", price: 29.99 },
     { id: 2, image: "https://via.placeholder.com/300", name: "Jeans", price: 49.99 },
