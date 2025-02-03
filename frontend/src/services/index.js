@@ -38,3 +38,28 @@ export async function avatarUploadService(formData, onProgressCallback){
 
 
 
+
+// Product services
+export async function getAllProductsService(limit = 10, skip = 0) {
+    const { data } = await axiosInstance.get(`/products?limit=${limit}&skip=${skip}`);
+    return data;
+}
+
+export async function getProductByIdService(productId) {
+    const { data } = await axiosInstance.get(`/products/${productId}`);
+    return data;
+}
+
+export async function getProductsByCategoryService(categoryId) {
+    const { data } = await axiosInstance.get(`/products/category/${categoryId}`);
+    return data;
+}
+
+export async function getProductsByTagService(tags = []) {
+    const tagQuery = tags.join(",");
+    const { data } = await axiosInstance.get(`/products/tag?tag=${tagQuery}`);
+    return data;
+}
+
+
+

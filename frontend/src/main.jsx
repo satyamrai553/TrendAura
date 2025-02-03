@@ -3,7 +3,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
-import { Home, Contact, About, PageNotFound, Login, Signup, Collection, Cart, New, Men, Women } from './pages/index.js';
+import { Home, Contact, About, PageNotFound, Login, Signup, Cart, ProductsPage } from './pages/index.js';
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 import { Provider } from 'react-redux'; // Import Provider
 import store  from './store/store.js';  // Import the store
@@ -16,12 +16,11 @@ const router = createBrowserRouter(
       <Route index element={<Home />} /> {/* Default route */}
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<Signup />} />
-      <Route path="new" element={<New />} />
-      <Route path="women" element={<Women />} />
-      <Route path="men" element={<Men />} />
+      <Route path="new" element={<ProductsPage />} />
+      <Route path="women" element={<ProductsPage />} />
+      <Route path="men" element={<ProductsPage />} />
       <Route path="about" element={<About />} />
       <Route path="contact" element={<Contact />} />
-      <Route path="collection" element={<Collection />} />
       <Route path="cart" element={<Cart />} />
       <Route path="*" element={<PageNotFound />} />
     </Route>

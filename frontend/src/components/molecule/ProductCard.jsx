@@ -1,4 +1,5 @@
 import React from "react";
+import {Button} from '../index.js'
 
 const ProductCard = ({ image, name, price }) => {
   return (
@@ -11,9 +12,7 @@ const ProductCard = ({ image, name, price }) => {
       <div className="p-4">
         <h3 className="text-lg font-semibold text-gray-800">{name}</h3>
         <p className="text-gray-500 mt-1">${price.toFixed(2)}</p>
-        <button className="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors">
-          Add to Cart
-        </button>
+        <Button children="Add to Cart"/>
       </div>
     </div>
   );

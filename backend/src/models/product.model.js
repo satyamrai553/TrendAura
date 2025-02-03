@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { Category } from "./category.model";
+import { Category } from "./category.model.js";
 
 const productSchema = new Schema(
   {
@@ -36,6 +36,7 @@ const productSchema = new Schema(
       type: [String], // Allows multiple tags
       enum: [
         "new",
+        "featured",
         "bestseller",
         "trending",
         "discounted",

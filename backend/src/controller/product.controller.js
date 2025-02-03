@@ -1,8 +1,8 @@
 import { User } from '../models/user.model.js';
 import { Product } from '../models/product.model.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
-import { ErrorResponse } from '../utils/ErrorResponse';
-import { ApiResponse } from '../utils/ApiResponse';
+import { ErrorResponse } from '../utils/ErrorResponse.js';
+import { ApiResponse } from '../utils/ApiResponse.js';
 import mongoose from 'mongoose';
 import { uploadOnCloudinary } from '../utils/uploadOnCloudinary.js';
 
