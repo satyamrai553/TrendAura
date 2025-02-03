@@ -1,35 +1,33 @@
-import React, {useState} from 'react'
-import {registerService, loginService, checkAuthService } from '../../services'
-import {Link ,useNavigate} from 'react-router-dom'
-import {login} from '../../store/authSlice.js'
-import {Button, Input, Logo} from '../index.js'
-import {useDispatch} from 'react-redux'
-import {useForm} from 'react-hook-form'
+import React, { useState } from 'react';
+import { registerService, loginService, checkAuthService } from '../../services';
+import { Link, useNavigate } from 'react-router-dom';
+import { login } from '../../store/authSlice.js';
+import { Button, Input, Logo } from '../index.js';
+import { useDispatch } from 'react-redux';
+import { useForm } from 'react-hook-form';
 
 function Signup() {
-    const navigate = useNavigate()
-    const [error, setError] = useState("")
-    const dispatch = useDispatch()
-    const {register, handleSubmit} = useForm()
+    const navigate = useNavigate();
+    const [error, setError] = useState("");
+    const dispatch = useDispatch();
+    const { register, handleSubmit } = useForm();
 
-    const create = async(data) => {
-        setError("")
+    const create = async (data) => {
+        setError("");
         try {
-            const userData = await registerService(data)
+            const userData = await registerService(data);
             if (userData) {
-                const userData = await checkAuthService()
-                if(userData) dispatch(login(userData));
-                navigate("/")
+                navigate("/login");
             }
         } catch (error) {
-            setError(error.message)
+            setError(error.message);
         }
-    }
+    };
 
-  return (
-    <div className="flex items-center justify-center">
+    return (
+        <div className="flex items-center justify-center">
             <div className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>
-            <div className="mb-2 flex justify-center">
+                <div className="mb-2 flex justify-center">
                     <span className="inline-block w-full max-w-[100px]">
                         <Logo width="100%" />
                     </span>
@@ -49,40 +47,59 @@ function Signup() {
                 <form onSubmit={handleSubmit(create)}>
                     <div className='space-y-5'>
                         <Input
-                        label="Full Name: "
-                        placeholder="Enter your full name"
-                        {...register("name", {
-                            required: true,
-                        })}
+                            label="Full Name: "
+                            placeholder="Enter your full name"
+                            {...register("fullname", {
+                                required: true,
+                            })}
                         />
                         <Input
-                        label="Email: "
-                        placeholder="Enter your email"
-                        type="email"
-                        {...register("email", {
-                            required: true,
-                            validate: {
-                                matchPatern: (value) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                                "Email address must be a valid address",
-                            }
-                        })}
+                            label="Email: "
+                            placeholder="Enter your email"
+                            type="email"
+                            {...register("email", {
+                                required: true,
+                                validate: {
+                                    matchPatern: (value) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
+                                        "Email address must be a valid address",
+                                }
+                            })}
                         />
                         <Input
-                        label="Password: "
-                        type="password"
-                        placeholder="Enter your password"
-                        {...register("password", {
-                            required: true,})}
+                            label="Phone number: "
+                            placeholder="Enter your Phone number"
+                            {...register("phoneNumber", {
+                                required: true,
+                            })}
                         />
+                        <Input
+                            label="Password: "
+                            type="password"
+                            placeholder="Enter your password"
+                            {...register("password", {
+                                required: true,
+                            })}
+                        />
+                        {/* Select Input Field for Role */}
+                        <div className="flex flex-col space-y-2">
+                            <label className="text-sm font-medium text-gray-700">Role:</label>
+                            <select
+                                {...register("role", { required: true })}
+                                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                <option value="">Select your role</option>
+                                <option value="seller">Seller</option>
+                                <option value="customer">Customer</option>
+                            </select>
+                        </div>
                         <Button type="submit" className="w-full">
                             Create Account
                         </Button>
                     </div>
                 </form>
             </div>
-
-    </div>
-  )
+        </div>
+    );
 }
 
-export default Signup
+export default Signup;

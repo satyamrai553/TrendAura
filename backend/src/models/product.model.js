@@ -32,6 +32,22 @@ const productSchema = new Schema(
       ref: Category,
       required: true,
     },
+    tags: {
+      type: [String], // Allows multiple tags
+      enum: [
+        "new",
+        "bestseller",
+        "trending",
+        "discounted",
+        "limited-edition",
+        "summer",
+        "winter",
+        "casual",
+        "formal",
+        "streetwear",
+      ],
+      default: [],
+    },
     seller: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User', 
