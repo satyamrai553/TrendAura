@@ -6,10 +6,10 @@ import {upload} from '../middlewares/multer.middleware.js'
 const router = Router()
 
 
-router.route("/").get(getAllProduct)
-router.route("/:productId").get(getProduct)
-router.route("/category/:categoryId").get(getProductByCategory)
 router.route("/tag").get(getProductsByTag);
+router.route("/category/:categoryId").get(getProductByCategory)
+router.route("/:productId").get(getProduct)
+router.route("/").get(getAllProduct)
 
 
 //protected routes

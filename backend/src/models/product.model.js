@@ -36,6 +36,8 @@ const productSchema = new Schema(
       type: [String], // Allows multiple tags
       enum: [
         "new",
+        "men",
+        "women",
         "featured",
         "bestseller",
         "trending",

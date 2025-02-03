@@ -11,17 +11,17 @@ function Header() {
   const navItems = [
     {
       name: 'NEW',
-      slug: "/",
+      slug: "/new",
       active: true
     }, 
     {
       name: 'MEN',
-      slug: "/",
+      slug: "/men",
       active: true
     }, 
     {
       name: 'WOMEN',
-      slug: "/",
+      slug: "/women",
       active: true
     }, 
     {

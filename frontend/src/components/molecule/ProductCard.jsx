@@ -1,8 +1,11 @@
 import React from "react";
 import {Button} from '../index.js'
+import { Link } from "react-router-dom";
 
-const ProductCard = ({ image, name, price }) => {
+const ProductCard = ({ image, name, price, _id }) => {
   return (
+   
+    <Link to={`/product/${_id}`}>
     <div className="bg-white rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300">
       <img
         src={image}
@@ -15,6 +18,7 @@ const ProductCard = ({ image, name, price }) => {
         <Button children="Add to Cart"/>
       </div>
     </div>
+    </Link>
   );
 };
 

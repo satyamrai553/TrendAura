@@ -56,9 +56,19 @@ export async function getProductsByCategoryService(categoryId) {
 }
 
 export async function getProductsByTagService(tags = []) {
-    const tagQuery = tags.join(",");
-    const { data } = await axiosInstance.get(`/products/tag?tag=${tagQuery}`);
-    return data;
+    try {
+        if (!Array.isArray(tags) || tags.length === 0) {
+            throw new Error("Tags parameter must be a non-empty array");
+        }
+
+        const tagQuery = tags.join(",");
+        const response = await axiosInstance.get(`/products/tag?tag=${tagQuery}`);
+
+        return response.data; // Ensure you're returning only the necessary data
+    } catch (error) {
+        console.error("Error fetching products by tag:", error.response?.data || error.message);
+        throw error; // Re-throw so the calling function can handle it
+    }
 }
 
 
