@@ -14,7 +14,7 @@ const ProductCard = ({ image, name, price, _id }) => {
       />
       <div className="p-4">
         <h3 className="text-lg font-semibold text-gray-800">{name}</h3>
-        <p className="text-gray-500 mt-1">${price.toFixed(2)}</p>
+        <p className="text-gray-500 mt-1">Rs.{price.toFixed(2)}</p>
         <Button children="Add to Cart"/>
       </div>
     </div>
