@@ -1,90 +1,122 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import {
+  getUserCartService,
+  deleteProductService,
+  increaseQuantityService,
+  decreaseQuantityService,
+  deleteAllProductService,
+} from "../services/index.js";
 
-const CartPage = () => {
+function Cart() {
+  const [cart, setCart] = useState({ products: [] }); // Initialize with empty products array
+  const [loading, setLoading] = useState(true); // Track loading state
+
+  useEffect(() => {
+    fetchCart();
+  }, []);
+
+  const fetchCart = async () => {
+    try {
+      setLoading(true);
+      const response = await getUserCartService();
+      console.log("Fetched Cart Response:", response); // Debugging line
+
+      // Extract the cart data from the response
+      const cartData = response?.data || { products: [] };
+      setCart(cartData);
+    } catch (error) {
+      console.error("Error fetching cart:", error);
+      setCart({ products: [] }); // Fallback to empty cart on error
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleIncrease = async (productId) => {
+    try {
+      await increaseQuantityService(productId);
+      fetchCart(); // Refresh the cart after increasing quantity
+    } catch (error) {
+      console.error("Error increasing quantity:", error);
+    }
+  };
+
+  const handleDecrease = async (productId) => {
+    try {
+      await decreaseQuantityService(productId);
+      fetchCart(); // Refresh the cart after decreasing quantity
+    } catch (error) {
+      console.error("Error decreasing quantity:", error);
+    }
+  };
+
+  const handleRemove = async (productId) => {
+    try {
+      await deleteProductService(productId);
+      fetchCart(); // Refresh the cart after removing a product
+    } catch (error) {
+      console.error("Error removing product:", error);
+    }
+  };
+
+  const handleClearCart = async () => {
+    try {
+      await deleteAllProductService();
+      setCart({ products: [] }); // Clear the cart in the UI
+    } catch (error) {
+      console.error("Error clearing cart:", error);
+    }
+  };
+
+  if (loading) {
+    return <p className="text-center text-gray-500">Loading cart...</p>;
+  }
+
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <div className="container mx-auto py-16 px-4">
-        {/* Cart Header */}
-        <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">
-          Your Shopping Cart
-        </h1>
+    <div className="max-w-4xl mx-auto p-4">
+      <h1 className="text-2xl font-semibold mb-6">Your Cart</h1>
 
-        {/* Cart Items */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Cart Items List */}
-          <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-              Items in Your Cart
-            </h2>
-            {/* Placeholder for items */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b pb-4">
-                <div className="flex items-center gap-4">
-                  <img
-                    src="https://via.placeholder.com/80"
-                    alt="Product"
-                    className="w-20 h-20 object-cover rounded"
-                  />
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-800">T-Shirt</h3>
-                    <p className="text-gray-600">Size: M</p>
-                  </div>
+      {cart.products?.length === 0 ? (
+        <p className="text-gray-500">Your cart is empty.</p>
+      ) : (
+        <>
+          <div className="space-y-4">
+            {cart.products?.map(({ product, quantity }) => (
+              <div key={product._id} className="flex items-center justify-between bg-white p-4 rounded-lg shadow-md">
+                <img src={product.image} alt={product.name} className="w-20 h-20 object-cover rounded-lg" />
+                <div className="flex-1 ml-4">
+                  <h2 className="text-lg font-semibold">{product.name}</h2>
+                  <p className="text-gray-600">Rs. {product.price.toFixed(2)}</p>
                 </div>
-                <div className="text-right">
-                  <p className="text-gray-800 font-semibold">$29.99</p>
-                  <button className="text-red-500 hover:underline mt-2 text-sm">
-                    Remove
+                <div className="flex items-center">
+                  <button onClick={() => handleDecrease(product._id)} className="px-3 py-1 bg-gray-300 rounded-l">
+                    -
+                  </button>
+                  <span className="px-4">{quantity}</span>
+                  <button onClick={() => handleIncrease(product._id)} className="px-3 py-1 bg-gray-300 rounded-r">
+                    +
                   </button>
                 </div>
+                <button
+                  onClick={() => handleRemove(product._id)}
+                  className="ml-4 px-3 py-1 bg-red-500 text-white rounded-md"
+                >
+                  Remove
+                </button>
               </div>
-
-              <div className="flex items-center justify-between border-b pb-4">
-                <div className="flex items-center gap-4">
-                  <img
-                    src="https://via.placeholder.com/80"
-                    alt="Product"
-                    className="w-20 h-20 object-cover rounded"
-                  />
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-800">Jeans</h3>
-                    <p className="text-gray-600">Size: 32</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="text-gray-800 font-semibold">$49.99</p>
-                  <button className="text-red-500 hover:underline mt-2 text-sm">
-                    Remove
-                  </button>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
 
-          {/* Cart Summary */}
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-semibold text-gray-700 mb-4">Summary</h2>
-            <div className="space-y-4">
-              <div className="flex justify-between">
-                <p className="text-gray-600">Subtotal</p>
-                <p className="text-gray-800 font-medium">$79.98</p>
-              </div>
-              <div className="flex justify-between">
-                <p className="text-gray-600">Shipping</p>
-                <p className="text-gray-800 font-medium">$5.00</p>
-              </div>
-              <div className="flex justify-between font-bold text-lg">
-                <p>Total</p>
-                <p>$84.98</p>
-              </div>
-            </div>
-            <button className="w-full mt-6 bg-indigo-600 text-white py-3 rounded-md font-semibold hover:bg-indigo-700 transition-colors">
-              Proceed to Checkout
-            </button>
-          </div>
-        </div>
-      </div>
+          <button
+            onClick={handleClearCart}
+            className="mt-6 w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition"
+          >
+            Clear Cart
+          </button>
+        </>
+      )}
     </div>
   );
-};
+}
 
-export default CartPage;
+export default Cart;

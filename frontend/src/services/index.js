@@ -72,13 +72,35 @@ export async function getProductsByTagService(tags = []) {
 }
 
 
-export async function addToCartService(){
-    try {
-        
-    } catch (error) {
-        
-    }
-}
 
+//cart services  
 
+export const addToCartService = async (productId) => {
+    const { data } = await axiosInstance.post(`/cart/${productId}`);
+    return data;
+};
 
+export const getUserCartService = async () => {
+    const { data } = await axiosInstance.get("/cart");
+    return data;
+};
+
+export const deleteProductService = async (productId) => {
+    const { data } = await axiosInstance.delete(`/cart/${productId}`);
+    return data;
+};
+
+export const increaseQuantityService = async (productId) => {
+    const { data } = await axiosInstance.patch(`/cart/${productId}/increase`);
+    return data;
+};
+
+export const decreaseQuantityService = async (productId) => {
+    const { data } = await axiosInstance.patch(`/cart/${productId}/decrease`);
+    return data;
+};
+
+export const deleteAllProductService = async () => {
+    const { data } = await axiosInstance.delete("/cart");
+    return data;
+};

@@ -1,17 +1,18 @@
 import React from "react";
 import { Button } from "../index.js";
 import { Link } from "react-router-dom";
+import AddToCart from "../atom/AddToCart.jsx";
 
-const ProductCard = ({ image, name, price, _id, onAddToCart }) => {
+const ProductCard = ({ image, name, price, _id}) => {
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300 hover:shadow-2xl w-full sm:w-64">
       {/* Product Image */}
-     
-      <div className="relative h-64 w-full overflow-hidden">
       <Link
           to={`/product/${_id}`}
           className="text-blue-500 hover:underline block mt-2"
         >
+      <div className="relative h-64 w-full overflow-hidden">
+      
         <img
           src={image}
           alt={name}
@@ -20,10 +21,11 @@ const ProductCard = ({ image, name, price, _id, onAddToCart }) => {
             e.target.src = "/path/to/fallback-image.jpg"; // Fallback image
           }}
         />
-        </Link>
+        
         {/* Overlay for hover effect */}
         <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-10 transition-all duration-300" style={{ backgroundColor: "rgba(0, 0, 0, 0)" }}></div>
       </div>
+      </Link>
 
       {/* Product Details */}
       <div className="p-5">
@@ -32,18 +34,12 @@ const ProductCard = ({ image, name, price, _id, onAddToCart }) => {
         </h3>
         <p className="text-lg font-bold text-gray-900">Rs. {price.toFixed(2)}</p>
 
-        {/* Link around name and price (but NOT the Add to Cart button) */}
+      
         
           
-        
+        <AddToCart _id={_id}/>
 
-        {/* Add to Cart Button */}
-        <button
-          onClick={() => onAddToCart(_id)}
-          className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 px-4 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 mt-4"
-        >
-          Add to Cart
-        </button>
+       
       </div>
     </div>
   );

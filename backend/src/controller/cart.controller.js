@@ -1,9 +1,9 @@
 import {User} from "../models/user.model.js"
 import {Product} from "../models/product.model.js"
-import {Cart} from "../models/user.model.js"
+import {Cart} from "../models/cart.model.js"
 import { asyncHandler } from "../utils/asyncHandler.js"
 import { ErrorResponse } from "../utils/ErrorResponse.js"
-import { ApiResponse } from "../utils/ApiResponse"
+import { ApiResponse } from "../utils/ApiResponse.js"
 import mongoose from "mongoose"
 
 
