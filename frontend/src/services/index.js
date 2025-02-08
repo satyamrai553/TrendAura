@@ -72,4 +72,13 @@ export async function getProductsByTagService(tags = []) {
 }
 
 
+export async function addToCartService(){
+    try {
+        
+    } catch (error) {
+        
+    }
+}
+
+
 

@@ -237,7 +237,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
     const avatar = await uploadOnCloudinary(avatarLocalPath)
 
     if (!avatar.url) {
-        fs.linkSync(avatarLocalPath)
+        fs.unlinkSync(avatarLocalPath)
         throw new ErrorResponse(400, "Error while uploading on avatar")
     }
 

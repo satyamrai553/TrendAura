@@ -9,26 +9,29 @@ import fs from 'fs'
 
 // Add Product
 const addProduct = asyncHandler(async (req, res) => {
-    const productImageLocalPath = req.file;
+    const productImageLocalPath = req.file?.path;
+    console.log(productImageLocalPath);
     if (!productImageLocalPath) {
         throw new ErrorResponse(400, "Product image is required");
     }
 
     const user = await User.findById(req.user?._id);
-    if (!user || user.role !== "seller" && user.role !== "admin") {
-        fs.linkSync(productImageLocalPath);
+    if (!user || (user.role !== "seller" && user.role !== "admin")) {
+        fs.unlinkSync(productImageLocalPath); // Delete the temporary file
         throw new ErrorResponse(403, "You are not authorized to add a product");
     }
 
     const { name, description, quantity, price, category, tags } = req.body;
 
     if (!name || !description || !quantity || !price || !category) {
-        fs.linkSync(productImageLocalPath);
+        console.log(req.body)
+        fs.unlinkSync(productImageLocalPath); // Delete the temporary file
         throw new ErrorResponse(400, "All fields are required");
     }
 
-    const cloudinaryResponse = await uploadOnCloudinary(productImageLocalPath.path);
+    const cloudinaryResponse = await uploadOnCloudinary(productImageLocalPath);
     if (!cloudinaryResponse || !cloudinaryResponse.url) {
+        fs.unlinkSync(productImageLocalPath); // Delete the temporary file
         throw new ErrorResponse(500, "Failed to upload product image");
     }
 
@@ -47,6 +50,7 @@ const addProduct = asyncHandler(async (req, res) => {
 
     const savedProduct = await product.save();
     if (!savedProduct) {
+        fs.unlinkSync(productImageLocalPath); 
         throw new ErrorResponse(500, "Failed to save product");
     }
 
@@ -54,6 +58,8 @@ const addProduct = asyncHandler(async (req, res) => {
         new ApiResponse(201, savedProduct, "Product added successfully!")
     );
 });
+
+
 
 // Get All Products
 const getAllProduct = asyncHandler(async (req, res) => {

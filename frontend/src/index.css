@@ -16,5 +16,12 @@
   --font-cookie: "Cookie", serif;
 }
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
 
 /* No need for @font-face when using Google Fonts */
