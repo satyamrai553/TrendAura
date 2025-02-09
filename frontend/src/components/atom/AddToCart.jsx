@@ -1,32 +1,26 @@
-import React, { useState, useEffect } from "react";
-import { addToCartService, deleteProductService, getUserCartService } from "../../services/index.js";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, removeFromCart, fetchCart } from "../../store/cartSlice";
 
 function AddToCart({ _id }) {
-  const [inCart, setInCart] = useState(false);
+  const dispatch = useDispatch();
 
+  // Get cart data from Redux store
+  const cartItems = useSelector((state) => state.cart?.cartData || []);
+  const inCart = cartItems.some((item) => item.product.id === _id);
+
+  // Fetch cart data when the component loads
   useEffect(() => {
-    const checkCart = async () => {
-      try {
-        const cart = await getUserCartService();
-        setInCart(cart.products.some((item) => item.product.id === _id));
-      } catch (error) {
-        console.error("Error fetching cart:", error);
-      }
-    };
-    checkCart();
-  }, [_id]);
+    dispatch(fetchCart());
+  }, [dispatch]);
 
   const handleCartAction = async () => {
-    try {
-      if (inCart) {
-        await deleteProductService(_id);
-      } else {
-        await addToCartService(_id);
-      }
-      setInCart(!inCart);
-    } catch (error) {
-      console.error("Error updating cart:", error);
+    if (inCart) {
+      await dispatch(removeFromCart(_id)).unwrap(); // Ensure state updates
+    } else {
+      await dispatch(addToCart(_id)).unwrap(); // Ensure state updates
     }
+    dispatch(fetchCart()); // Fetch updated cart after change
   };
 
   return (

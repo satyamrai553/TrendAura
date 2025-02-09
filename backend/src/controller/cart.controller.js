@@ -76,9 +76,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
         throw new ErrorResponse(404, "Cart not found");
     }
 
-    if(cart.owner != user){
-        throw new ErrorResponse(400, "You are not authorized delete product from cart")
-    }
+    
     
 
     // Remove the product from the cart

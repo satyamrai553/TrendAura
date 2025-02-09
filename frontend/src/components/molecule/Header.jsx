@@ -1,5 +1,5 @@
 import React from 'react'
-import {Container, Logo, LogoutBtn} from '../index.js'
+import {Container, Logo, LogoutBtn, CartBtn} from '../index.js'
 import { Link, useNavigate } from 'react-router-dom'
 import {useSelector} from 'react-redux'
 
@@ -68,6 +68,12 @@ function Header() {
                 <LogoutBtn />
               </li>
             )}
+            {authStatus && (
+              <li>
+                <CartBtn/>
+              </li>
+            )}
+
           </ul>
         </nav>
         </Container>
