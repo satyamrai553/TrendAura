@@ -1,6 +1,6 @@
 import axiosInstance from "../api/axiosInstance";
 
-
+//Auth services
 export async function registerService(formData){
     const {data} = await axiosInstance.post("/users/register", {
         ...formData,
@@ -64,10 +64,10 @@ export async function getProductsByTagService(tags = []) {
         const tagQuery = tags.join(",");
         const response = await axiosInstance.get(`/products/tag?tag=${tagQuery}`);
 
-        return response.data; // Ensure you're returning only the necessary data
+        return response.data; 
     } catch (error) {
         console.error("Error fetching products by tag:", error.response?.data || error.message);
-        throw error; // Re-throw so the calling function can handle it
+        throw error; 
     }
 }
 

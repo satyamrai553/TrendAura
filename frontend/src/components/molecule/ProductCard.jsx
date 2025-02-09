@@ -37,7 +37,7 @@ const ProductCard = ({ image, name, price, _id}) => {
       
         
           
-        <AddToCart _id={_id}/>
+        <AddToCart key ={_id} productId={_id}/>
 
        
       </div>

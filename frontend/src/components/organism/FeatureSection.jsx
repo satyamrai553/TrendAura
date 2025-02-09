@@ -15,17 +15,21 @@ function FeatureSection() {
         try {
             setError(false);
             setLoading(true);
-
-            // Fetch products with the "new" tag, adding pagination
+    
             const response = await getProductsByTagService(["new"], page);
-
+    
             if (response && response.data) {
-                setProducts((prevProducts) => [
-                    ...prevProducts,
-                    ...response.data, // Append new products to the list
-                ]);
-
-                // If less than 10 products are returned, there are no more products
+                setProducts((prevProducts) => {
+                    // Create a Set to remove duplicates based on `_id`
+                    const uniqueProducts = new Map();
+                    
+                    [...prevProducts, ...response.data].forEach((product) => {
+                        uniqueProducts.set(product._id, product);
+                    });
+    
+                    return Array.from(uniqueProducts.values());
+                });
+    
                 setHasMore(response.data.length === 10);
             } else {
                 setHasMore(false);
@@ -37,7 +41,7 @@ function FeatureSection() {
             setLoading(false);
         }
     }, [page]);
-
+    
     useEffect(() => {
         fetchProducts(); // Load initial products
     }, [fetchProducts]);
