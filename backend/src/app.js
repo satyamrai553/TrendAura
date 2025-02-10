@@ -6,14 +6,22 @@ import cookieParser from 'cookie-parser';
 
 const app = express();
 
+const allowedOrigins = process.env.CORS_ORIGIN.split(","); // Support multiple origins
+
 app.use(
-    cors({
-      origin: process.env.CORS_ORIGIN, 
-      credentials: true, 
-      methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"], 
-      allowedHeaders: ["Content-Type", "Authorization"], 
-    })
-  );
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // Allow cookies & authentication headers
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 
 app.use(express.json({limit: "16kb"}))
