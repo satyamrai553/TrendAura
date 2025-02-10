@@ -97,11 +97,10 @@ const loginUser = asyncHandler(async (req, res) => {
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
 
     const options = {
-        httpOnly: true, // Prevents JavaScript access (good for security)
-        secure:  true , // Only use secure cookies in production
-        sameSite: "none", // Prevents CSRF but allows cross-origin auth
-        maxAge: 7 * 24 * 60 * 60 * 1000, // Cookie expires in 7 days
-      };
+        httpOnly: true, 
+        secure:  true,
+        sameSite: "none"
+    } 
       
       res.status(200)
         .cookie("accessToken", accessToken, options) // Set accessToken
@@ -127,8 +126,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     const options = {
         httpOnly: true,
         secure: true,
-        sameSite: "none",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
+        sameSite: "none"
     }
     return res.status(200).clearCookie("accessToken", options).clearCookie("refreshToken", options)
         .json(new ApiResponse(200, {}, "User logged out successfully"))
@@ -162,7 +160,8 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
         const options = {
             httpOnly: true,
-            secure: true
+            secure: true,
+            sameSite: "none"
         }
         const { accessToken, newRefreshToken } = await generateAccessAndRefreshTokens(user._id)
         return res
