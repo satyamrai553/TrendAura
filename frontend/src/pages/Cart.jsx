@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getUserCartService,
   deleteProductService,
@@ -6,117 +7,126 @@ import {
   decreaseQuantityService,
   deleteAllProductService,
 } from "../services/index.js";
+import { fetchCart } from "../store/cartSlice";
+import { Link } from "react-router-dom";
+import { Trash, Plus, Minus } from "lucide-react";
 
-function Cart() {
-  const [cart, setCart] = useState({ products: [] }); // Initialize with empty products array
-  const [loading, setLoading] = useState(true); // Track loading state
+function CartPage() {
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart?.cartData || []);
+
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    fetchCart();
-  }, []);
+    let totalPrice = cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+    setTotal(totalPrice);
+  }, [cartItems]);
 
-  const fetchCart = async () => {
+  const fetchUpdatedCart = async () => {
     try {
-      setLoading(true);
-      const response = await getUserCartService();
-      console.log("Fetched Cart Response:", response); // Debugging line
-
-      // Extract the cart data from the response
-      const cartData = response?.data || { products: [] };
-      setCart(cartData);
+      const updatedCart = await getUserCartService();
+      if (updatedCart && updatedCart.data && Array.isArray(updatedCart.data.products)) {
+        dispatch(fetchCart({ cartData: updatedCart.data.products }));
+      }
     } catch (error) {
-      console.error("Error fetching cart:", error);
-      setCart({ products: [] }); // Fallback to empty cart on error
-    } finally {
-      setLoading(false);
+      console.error("❌ Failed to fetch updated cart:", error);
+    }
+  };
+
+  const handleDelete = async (productId) => {
+    try {
+      await deleteProductService(productId);
+      fetchUpdatedCart();
+    } catch (error) {
+      console.error("❌ Error deleting product:", error);
     }
   };
 
   const handleIncrease = async (productId) => {
     try {
       await increaseQuantityService(productId);
-      fetchCart(); // Refresh the cart after increasing quantity
+      fetchUpdatedCart();
     } catch (error) {
-      console.error("Error increasing quantity:", error);
+      console.error("❌ Error increasing quantity:", error);
     }
   };
 
   const handleDecrease = async (productId) => {
     try {
       await decreaseQuantityService(productId);
-      fetchCart(); // Refresh the cart after decreasing quantity
+      fetchUpdatedCart();
     } catch (error) {
-      console.error("Error decreasing quantity:", error);
-    }
-  };
-
-  const handleRemove = async (productId) => {
-    try {
-      await deleteProductService(productId);
-      fetchCart(); // Refresh the cart after removing a product
-    } catch (error) {
-      console.error("Error removing product:", error);
+      console.error("❌ Error decreasing quantity:", error);
     }
   };
 
   const handleClearCart = async () => {
     try {
       await deleteAllProductService();
-      setCart({ products: [] }); // Clear the cart in the UI
+      fetchUpdatedCart();
     } catch (error) {
-      console.error("Error clearing cart:", error);
+      console.error("❌ Error clearing cart:", error);
     }
   };
 
-  if (loading) {
-    return <p className="text-center text-gray-500">Loading cart...</p>;
-  }
-
   return (
-    <div className="max-w-4xl mx-auto p-4">
-      <h1 className="text-2xl font-semibold mb-6">Your Cart</h1>
+    <div className="bg-background_primary h-screen pt-12">
+      <div className="max-w-4xl mx-auto p-6 bg-background_secondary shadow-lg rounded-lg">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">🛒 Your Cart</h2>
 
-      {cart.products?.length === 0 ? (
-        <p className="text-gray-500">Your cart is empty.</p>
-      ) : (
-        <>
+        {cartItems.length === 0 ? (
+          <p className="text-gray-600 text-lg">Your cart is empty.</p>
+        ) : (
           <div className="space-y-4">
-            {cart.products?.map(({ product, quantity }) => (
-              <div key={product._id} className="flex items-center justify-between bg-white p-4 rounded-lg shadow-md">
-                <img src={product.image} alt={product.name} className="w-20 h-20 object-cover rounded-lg" />
-                <div className="flex-1 ml-4">
-                  <h2 className="text-lg font-semibold">{product.name}</h2>
-                  <p className="text-gray-600">Rs. {product.price.toFixed(2)}</p>
+            {cartItems.map((item) => (
+              <div key={item.product._id} className="flex items-center justify-between p-4 border rounded-lg shadow-md">
+                <div className="flex items-center space-x-4">
+                  <img src={item.product.image} alt={item.product.name} className="w-20 h-20 object-cover rounded-lg" />
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700">{item.product.name}</h3>
+                    <p className="text-gray-500">Rs.{item.product.price.toFixed(2)}</p>
+                  </div>
                 </div>
-                <div className="flex items-center">
-                  <button onClick={() => handleDecrease(product._id)} className="px-3 py-1 bg-gray-300 rounded-l">
-                    -
+
+                <div className="flex items-center space-x-4">
+                  <button onClick={() => handleDecrease(item.product._id)} className="bg-gray-300 p-2 rounded-lg hover:bg-gray-400">
+                    <Minus className="w-4 h-4" />
                   </button>
-                  <span className="px-4">{quantity}</span>
-                  <button onClick={() => handleIncrease(product._id)} className="px-3 py-1 bg-gray-300 rounded-r">
-                    +
+                  <span className="text-lg font-semibold">{item.quantity}</span>
+                  <button onClick={() => handleIncrease(item.product._id)} className="bg-gray-300 p-2 rounded-lg hover:bg-gray-400">
+                    <Plus className="w-4 h-4" />
                   </button>
                 </div>
-                <button
-                  onClick={() => handleRemove(product._id)}
-                  className="ml-4 px-3 py-1 bg-red-500 text-white rounded-md"
-                >
-                  Remove
+
+                <button onClick={() => handleDelete(item.product._id)} className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600">
+                  <Trash className="w-5 h-5" />
                 </button>
               </div>
             ))}
           </div>
+        )}
 
-          <button
-            onClick={handleClearCart}
-            className="mt-6 w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition"
-          >
-            Clear Cart
-          </button>
-        </>
-      )}
+        {/* Order Total Section */}
+        {cartItems.length > 0 && (
+          <div className="mt-6 p-4 bg-gray-100 rounded-lg shadow-md flex justify-between items-center">
+            <h3 className="text-xl font-semibold text-gray-700">Total:</h3>
+            <p className="text-xl font-bold text-gray-900">Rs.{total.toFixed(2)}</p>
+          </div>
+        )}
+
+        {cartItems.length > 0 && (
+          <div className="mt-6 flex justify-between">
+            <button onClick={handleClearCart} className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+              Clear Cart
+            </button>
+            <Link to="/checkout" className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600">
+              Proceed to Checkout
+            </Link>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
-export default Cart;
+export default CartPage;
