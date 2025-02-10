@@ -99,7 +99,7 @@ const loginUser = asyncHandler(async (req, res) => {
     const options = {
         httpOnly: true, // Prevents JavaScript access (good for security)
         secure:  true , // Only use secure cookies in production
-        sameSite: "Lax", // Prevents CSRF but allows cross-origin auth
+        sameSite: "none", // Prevents CSRF but allows cross-origin auth
         maxAge: 7 * 24 * 60 * 60 * 1000, // Cookie expires in 7 days
       };
       
@@ -126,7 +126,9 @@ const logoutUser = asyncHandler(async (req, res) => {
     )
     const options = {
         httpOnly: true,
-        secure: true
+        secure: true,
+        sameSite: "none",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
     }
     return res.status(200).clearCookie("accessToken", options).clearCookie("refreshToken", options)
         .json(new ApiResponse(200, {}, "User logged out successfully"))
