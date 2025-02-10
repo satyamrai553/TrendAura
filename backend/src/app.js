@@ -8,10 +8,10 @@ const app = express();
 
 app.use(
     cors({
-      origin: "http://localhost:5173", // Change this to your frontend URL
-      credentials: true, // Allow cookies to be sent
-      methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"], // Allow required methods
-      allowedHeaders: ["Content-Type", "Authorization"], // Allow required headers
+      origin: "http://trend-aura-phi.vercel.app", 
+      credentials: true, 
+      methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"], 
+      allowedHeaders: ["Content-Type", "Authorization"], 
     })
   );
 
