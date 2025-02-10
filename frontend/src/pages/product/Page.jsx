@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getProductByIdService } from '../../services/index.js'; // adjust path as needed
-
+import AddToCart from '../../components/atom/AddToCart.jsx';
 function ProductPage() {
   const { _id } = useParams(); // Get the product ID from URL
   const [product, setProduct] = useState(null);
@@ -47,9 +47,7 @@ function ProductPage() {
           <p className="text-lg text-gray-600 mt-2">{product.description}</p>
           <p className="text-xl font-semibold text-gray-900 mt-4">Price: ${product.price}</p>
           <p className="text-sm text-gray-500 mt-2">Quantity Available: {product.quantity}</p>
-          <button className="mt-6 px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700">
-            Add to Cart
-          </button>
+          <AddToCart key ={_id} productId={_id}/>
         </div>
       </div>
     </div>

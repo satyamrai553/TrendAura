@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCart } from "../../store/cartSlice";
-import { addToCartService, deleteProductService } from "../../services/index.js"; // Import API calls
+import { addToCartService, deleteProductService, getUserCartService } from "../../services/index.js"; // Import API calls
 
 function AddToCart({ productId }) {
   const dispatch = useDispatch();
@@ -18,9 +18,16 @@ function AddToCart({ productId }) {
         await addToCartService(productId); // Add to backend
       }
 
-      // Wait for Redux to fetch updated cart data before re-rendering
-      await dispatch(fetchCart()).unwrap(); 
-      
+      // Fetch updated cart data immediately
+      const updatedCart = await getUserCartService();
+
+      if (updatedCart && updatedCart.data && Array.isArray(updatedCart.data.products)) {
+        console.log("🚀 Dispatching updated cart data:", updatedCart.data.products);
+        dispatch(fetchCart({ cartData: updatedCart.data.products })); // Ensure Redux updates properly
+      } else {
+        console.error("❌ Unexpected API response structure:", updatedCart);
+      }
+
     } catch (error) {
       console.error("Error updating cart:", error);
     }
