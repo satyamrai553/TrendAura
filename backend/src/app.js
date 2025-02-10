@@ -8,7 +8,7 @@ const app = express();
 
 app.use(
     cors({
-      origin: "http://trend-aura-phi.vercel.app", 
+      origin: process.env.CORS_ORIGIN, 
       credentials: true, 
       methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"], 
       allowedHeaders: ["Content-Type", "Authorization"], 
