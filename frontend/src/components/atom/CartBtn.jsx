@@ -13,7 +13,7 @@ function CartBtn() {
 
   return (
     <Link to="/cart" className="relative group">
-      <div className="relative inline-block ml-4">
+      <div className="relative inline-block ml-4 sm: mt-4">
         <ShoppingCart className="w-8 h-8 text-gray-700 group-hover:translate-x-1 transition-transform duration-300" />
         <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
           {cartData.length}

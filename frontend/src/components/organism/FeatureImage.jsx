@@ -5,7 +5,7 @@ import React from 'react'
 function FeatureImage() {
   const featureImage = "https://res.cloudinary.com/dpxkotl1n/image/upload/v1738612865/TrendAura/ge115pzztmdnwly3efv8.jpg"
   return (
-    <div className="relative flex justify-center">
+    <div className="relative flex justify-center pb-16">
   {/* Background Image */}
   <img
   src={featureImage}
