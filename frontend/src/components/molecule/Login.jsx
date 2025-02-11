@@ -12,19 +12,22 @@ function Login() {
     const {register, handleSubmit} = useForm()
     const [error, setError] = useState("")
 
-    const login = async(data)=>{
-        setError("")
+    const login = async (data) => {
+        setError("");
         try {
-            const session = await loginService(data)
-            if(session){
-                const userData = await checkAuthService()
-                if(userData) dispatch(authLogin(userData));
-                    navigate("/")
+            const session = await loginService(data);
+            if (session) {
+                
+                const userData = await checkAuthService();
+                if (userData) {
+                    dispatch(authLogin(userData)); 
+                    navigate("/", { replace: true }); 
+                }
             }
         } catch (error) {
-            setError(error.message)
+            setError(error.message);
         }
-    }
+    };
 
 
   return (

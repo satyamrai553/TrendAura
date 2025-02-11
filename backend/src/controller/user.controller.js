@@ -6,6 +6,9 @@ import jwt from 'jsonwebtoken'
 import { uploadOnCloudinary } from "../utils/uploadOnCloudinary.js";
 import fs from 'fs';
 
+const isProduction = process.env.NODE_ENV === "production";
+
+
 
 
 const generateAccessAndRefreshTokens = async (userId) => {
@@ -97,10 +100,10 @@ const loginUser = asyncHandler(async (req, res) => {
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
 
     const options = {
-        httpOnly: true, 
-        secure:  true,
-        sameSite: "lax", 
-        domain: ".satyamcodes.online", 
+        httpOnly: true,
+        secure: isProduction,  
+        sameSite: isProduction ? "lax" : "strict", 
+        domain: isProduction ? ".satyamcodes.online" : undefined, 
     } 
       
       res.status(200)
@@ -126,10 +129,10 @@ const logoutUser = asyncHandler(async (req, res) => {
     )
     const options = {
         httpOnly: true,
-        secure: true,
-        sameSite: "lax", 
-        domain: ".satyamcodes.online",
-    }
+        secure: isProduction,  
+        sameSite: isProduction ? "lax" : "strict", 
+        domain: isProduction ? ".satyamcodes.online" : undefined, 
+    } 
     return res.status(200).clearCookie("accessToken", options).clearCookie("refreshToken", options)
         .json(new ApiResponse(200, {}, "User logged out successfully"))
 })
@@ -162,10 +165,10 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
         const options = {
             httpOnly: true,
-            secure: true,
-            sameSite: "lax", 
-            domain: ".satyamcodes.online", 
-        }
+            secure: isProduction,  
+            sameSite: isProduction ? "lax" : "strict", 
+            domain: isProduction ? ".satyamcodes.online" : undefined, 
+        } 
         const { accessToken, newRefreshToken } = await generateAccessAndRefreshTokens(user._id)
         return res
             .status(200)
