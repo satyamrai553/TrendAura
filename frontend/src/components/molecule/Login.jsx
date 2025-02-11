@@ -3,7 +3,8 @@ import {Link, useNavigate} from 'react-router-dom'
 import {login as authLogin} from '../../store/authSlice'
 import {Button, Input, Logo} from '../index'
 import { useDispatch } from 'react-redux'
-import {loginService, checkAuthService} from '../../services/index'
+import { fetchCart } from '../../store/cartSlice'
+import {loginService, checkAuthService, getUserCartService,} from '../../services/index'
 import {useForm} from "react-hook-form"
 
 function Login() {
@@ -17,18 +18,20 @@ function Login() {
         try {
             const session = await loginService(data);
             if (session) {
-                
-                const userData = await checkAuthService();
+                const userData = await checkAuthService(); // Fetch fresh user data
                 if (userData) {
-                    dispatch(authLogin(userData)); 
-                    navigate("/", { replace: true }); 
+                    dispatch(authLogin(userData)); // Update Redux store
+                    const cartData = await getUserCartService(); // Fetch cart data
+                    if (cartData?.data?.products) {
+                        dispatch(fetchCart({ cartData: cartData.data.products }));
+                    }
+                    navigate("/"); // Navigate only after everything is updated
                 }
             }
         } catch (error) {
             setError(error.message);
         }
     };
-
 
   return (
     <div

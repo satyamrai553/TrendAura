@@ -2,15 +2,23 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCart } from "../../store/cartSlice";
 import { addToCartService, deleteProductService, getUserCartService } from "../../services/index.js"; // Import API calls
+import { useNavigate } from "react-router-dom";
+
 
 function AddToCart({ productId }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const authStatus = useSelector((state) => state.auth.status);
 
   // Get cart data from Redux store
   const cartItems = useSelector((state) => state.cart?.cartData || []);
   const inCart = cartItems.some((item) => item.product._id === productId);
 
   const handleCartAction = async () => {
+    if (!authStatus) {
+      navigate("/login"); 
+      return;
+    }
     try {
       if (inCart) {
         await deleteProductService(productId); // Remove from backend
