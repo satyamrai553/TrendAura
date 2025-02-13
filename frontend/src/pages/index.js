@@ -7,3 +7,4 @@ export { default as Signup } from './auth/Signup';
 export { default as Cart } from './Cart';
 export { default as PageNotFound } from './notFound/PageNotFound';
 export {default as ProductPage} from './product/Page.jsx'
+export {default as ProductsByCategory} from './ProductsByCategory.jsx'
