@@ -1,4 +1,5 @@
 import {User} from '../models/user.model.js'
+import {Cart } from '../models/cart.model.js'
 import { asyncHandler } from '../utils/asyncHandler.js'
 import { ErrorResponse } from '../utils/ErrorResponse.js'
 import { ApiResponse } from "../utils/ApiResponse.js";
@@ -58,6 +59,15 @@ const registerUser = asyncHandler(async (req, res) => {
     if (!createdUser) {
         throw new ErrorResponse(501, "Somthing went wrong while registring a user")
     }
+    
+    const cart = await Cart.create({
+        owner: user._id,
+        product:[]
+    })
+    if(!cart){
+        throw new ErrorResponse(500, "User Cart creation fail")
+    }
+    
 
     return res
         .status(201)
