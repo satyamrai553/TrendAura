@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { getProductsByTagService } from "../../services/index.js";
-import { ProductCard } from "../index.js"; // Ensure this is correctly imported
+import { ProductCard } from "../index.js"; 
 
 function FeatureSection() {
     const [error, setError] = useState(false);
