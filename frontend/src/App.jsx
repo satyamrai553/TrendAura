@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { Header, Footer } from "./components/index.js";
 import { useDispatch } from "react-redux";
-import { checkAuthService, getUserCartService } from "./services/index.js";
+import { checkAuthService } from "./services/index.js";
 import { login, logout } from "./store/authSlice.js";
-import { saveCartToLocalStorage } from "./helper/index.js";
+import { getUserCartService } from "./services/index.js";
+import { fetchCart } from "./store/cartSlice.js";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -13,19 +14,15 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Authenticate user and update state in Redux
+        // Authenticate user and update state
         const userData = await checkAuthService();
         if (userData) {
           dispatch(login(userData));
-
+          
           // Fetch user cart only if authenticated
           const cartData = await getUserCartService();
           if (cartData?.data?.products) {
-            // Store cart data in local storage instead of Redux
-            saveCartToLocalStorage(cartData.data.products);
-          } else {
-            // If no products, clear the cart in local storage
-            saveCartToLocalStorage([]);
+            dispatch(fetchCart({ cartData: cartData.data.products }));
           }
         } else {
           dispatch(logout());
