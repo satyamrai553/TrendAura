@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logoutService, checkAuthService, getUserCartService } from "../../services";
 import { logout, login } from "../../store/authSlice";
-import { fetchCart } from "../../store/cartSlice";
+import { saveCartToLocalStorage } from "../../helper/index.js";
 
 function LogoutBtn() {
   const dispatch = useDispatch();
@@ -11,20 +11,28 @@ function LogoutBtn() {
 
   const logoutHandler = async () => {
     try {
-      await logoutService(); // Logout API call
-      dispatch(logout()); // Clear auth state
-      dispatch(fetchCart({ cartData: [] })); // Clear cart data
-      navigate("/"); // Redirect to home page
-
-      // Fetch latest data to ensure page updates
+      // Call backend to perform logout
+      await logoutService();
+      
+      // Clear auth state in Redux
+      dispatch(logout());
+      
+      // Clear cart data in local storage
+      saveCartToLocalStorage([]);
+      
+      // Redirect to home page
+      navigate("/");
+      
+      // Optionally, re-check authentication to update auth state if needed
       const updatedUser = await checkAuthService();
       if (updatedUser) {
-        dispatch(login(updatedUser)); // Update Redux state with new user data
+        dispatch(login(updatedUser));
       }
-
+      
+      // Optionally, update cart from backend and save it in local storage
       const updatedCart = await getUserCartService();
-      dispatch(fetchCart({ cartData: updatedCart?.data?.products || [] }));
-
+      saveCartToLocalStorage(updatedCart?.data?.products || []);
+      
     } catch (error) {
       console.error("Error during logout:", error);
     }
