@@ -71,6 +71,25 @@ export async function getProductsByTagService(tags = []) {
     }
 }
 
+export async function getProductsByFilterService(filters = {}) {
+    try {
+        // Remove empty filters
+        const validFilters = Object.fromEntries(
+            Object.entries(filters).filter(([_, value]) => value !== "")
+        );
+
+        const response = await axiosInstance.get("/products/filter", {
+            params: validFilters, // Axios will automatically format it into query params
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching filtered products:", error.response?.data || error.message);
+        throw error;
+    }
+}
+
+
 
 
 //cart services  

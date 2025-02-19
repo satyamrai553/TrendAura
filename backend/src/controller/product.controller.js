@@ -220,6 +220,40 @@ const getProductsByTag = asyncHandler(async (req, res) => {
     );
 });
 
+
+const getProductsByFilter = asyncHandler(async(req,res)=>{
+    const {category, tag, minPrice, maxPrice} = req.query;
+    const query = {};
+
+    if (category) {
+      query.category = category;
+    }
+
+    if (tag) {
+      query.tags = tag;
+    }
+
+    if (minPrice || maxPrice) {
+      query.price = {};
+      if (minPrice) {
+        query.price.$gte = Number(minPrice);
+      }
+      if (maxPrice) {
+        query.price.$lte = Number(maxPrice);
+      }
+    }
+
+
+    const products = await Product.find(query);
+    if(!products){
+        throw new ErrorResponse(404, "No product found")
+    }
+    return res.status(200).json(
+        new ApiResponse(200, products, "Products fetched successfully")
+    )
+
+})
+
 export { 
     addProduct, 
     getAllProduct, 
@@ -227,5 +261,6 @@ export {
     updateProduct, 
     deleteProduct, 
     getProductByCategory,
-    getProductsByTag
+    getProductsByTag,
+    getProductsByFilter
 };

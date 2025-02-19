@@ -58,7 +58,7 @@ function ProductByCategory({ tags }) {
   };
 
   return (
-    <div className='mt-2'> 
+    <div className='mt-2 ml-6'> 
       {/* Product Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {products.map((product) => (

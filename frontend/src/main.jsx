@@ -12,13 +12,10 @@ import store  from './store/store.js';  // Import the store
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-    
       <Route index element={<Home />} /> 
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<Signup />} />
-      <Route path="new" element={<ProductsByCategory />} />
-      <Route path="women" element={<ProductsByCategory />} />
-      <Route path="men" element={<ProductsByCategory />} />
+      <Route path=":tag" element={<ProductsByCategory />} />
       <Route path="about" element={<About />} />
       <Route path="contact" element={<Contact />} />
       <Route path="cart" element={<Cart />} />
