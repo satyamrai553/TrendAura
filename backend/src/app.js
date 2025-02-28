@@ -36,14 +36,14 @@ app.use(cookieParser())
 
 
 //import routes
-import helathCheckRouter from "./routes/healthCheck.routes.js"
+import healthCheckRouter from "./routes/healthCheck.routes.js"
 import userRouter from "./routes/user.route.js";
 import productRouter from "./routes/product.route.js";
 import categoryRouter from './routes/category.route.js'
 import cartRouter from "./routes/cart.route.js"
 
 //routes
-app.use("/api/v1/healthCheck", helathCheckRouter)
+app.use("/api/v1/healthCheck", healthCheckRouter)
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/products", productRouter)
 app.use("/api/v1/category", categoryRouter)
