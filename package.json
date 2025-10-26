@@ -1,0 +1,22 @@
+{
+  "name": "trendaura",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "workspaces": [
+    "backend",
+    "frontend",
+    "common"
+  ],
+  "scripts": {
+    "dev": "echo \"Run dev scripts in frontend or backend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/satyamrai553/TrendAura.git"
+  },
+  "bugs": {
+    "url": "https://github.com/satyamrai553/TrendAura/issues"
+  },
+  "homepage": "https://github.com/satyamrai553/TrendAura#readme"
+}
