@@ -1,22 +1,18 @@
 {
   "name": "@trendaura/common",
   "version": "1.0.0",
-  "description": "Common package for TrendAura backend and frontend",
+  "description": "Shared schemas and utils for TrendAura backend & frontend",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch",
-    "test": "echo \"No tests yet\" && exit 0"
-  },
-  "keywords": ["zod", "common", "shared", "schema"],
-  "author": "Satyam Rai",
-  "license": "ISC",
-  "devDependencies": {
-    "typescript": "^5.9.3"
+    "dev": "tsc --watch"
   },
   "dependencies": {
     "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
   }
 }

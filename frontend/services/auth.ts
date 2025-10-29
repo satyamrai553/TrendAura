@@ -1,5 +1,8 @@
 import api from "./api";
-import {registerUser} from "@trendaura/common"
+import registerUserSchema from "@trendaura/common"
+
+
+
 export const loginUser = async (email, password) => {
   try {
     const response = await api.post("/auth/login", { email, password });
