@@ -9,6 +9,11 @@
     "common"
   ],
   "scripts": {
-    "build": "npm run build --workspace=@trendaura/common"
+    "build": "npm run build --workspace=@trendaura/common",
+     "dev": "concurrently -n BACKEND,FRONTEND -c blue,magenta \"npm run dev --workspace=backend\" \"npm run dev --workspace=frontend\""
+
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
   }
 }
