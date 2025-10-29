@@ -9,9 +9,9 @@ export const loginUser = async (formData: LoginUserInput) => {
     try {
       const {email, password} = formData;
       const response = await api.post("/users/login", { email, password});
-      if (response.data.token) {
+      if (response.data?.data?.accessToken) {
         // Save JWT to localStorage
-        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("token", response.data.data.accessToken);
       }
       return response.data;
     } catch (error) {

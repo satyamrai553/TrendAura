@@ -1,8 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ReactNode } from "react";
 import { useRouter } from "next/navigation";
 
-export default function AuthGuard({ children }) {
+type AuthGuardProps = {
+  children: ReactNode;
+};
+
+export default function AuthGuard({ children }: AuthGuardProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
