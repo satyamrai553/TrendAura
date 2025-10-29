@@ -81,6 +81,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 
 const loginUser = asyncHandler(async (req, res) => {
+    console.log(req.body);
     const { email, phoneNumber, password } = req.body;
     if (!email && !phoneNumber) {
         throw new ErrorResponse(400, "Email or phone number is required")

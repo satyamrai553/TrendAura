@@ -7,11 +7,6 @@ export const loginUserSchema = z.object({
     .string()
     .min(8, "Password must be at least 8 characters long")
     .max(64, "Password cannot exceed 64 characters"),
-
-  phoneNumber: z
-    .string()
-    .trim()
-    .regex(/^\+?[0-9]{10,15}$/, "Invalid phone number format"),
 });
 
 
@@ -31,7 +26,7 @@ export const registerUserSchema = z.object({
     .trim()
     .regex(/^\+?[1-9]\d{9,14}$/, "Invalid phone number format"), // more precise E.164-compatible pattern
 
-  fullName: z
+  fullname: z
     .string()
     .trim()
     .min(3, "Name must be at least 3 characters long")

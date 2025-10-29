@@ -2,13 +2,12 @@ import { z } from "zod";
 export declare const loginUserSchema: z.ZodObject<{
     email: z.ZodString;
     password: z.ZodString;
-    phoneNumber: z.ZodString;
 }, z.core.$strip>;
 export declare const registerUserSchema: z.ZodObject<{
     email: z.ZodString;
     password: z.ZodString;
     phoneNumber: z.ZodString;
-    fullName: z.ZodString;
+    fullname: z.ZodString;
     role: z.ZodEnum<{
         admin: "admin";
         customer: "customer";
