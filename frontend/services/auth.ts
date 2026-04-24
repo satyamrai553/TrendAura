@@ -1,36 +1,40 @@
-import api from "./api";
-import {registerUserSchema, loginUserSchema} from "@trendaura/common"
-import {z} from "zod";
+import { apiCall } from "./api";
+import { registerUserSchema, loginUserSchema } from "@trendaura/common";
+import { z } from "zod";
+
 export type LoginUserInput = z.infer<typeof loginUserSchema>;
 export type RegisterUserInput = z.infer<typeof registerUserSchema>;
 
+// Note: Login and register are now handled by Redux thunks (loginUserThunk, registerUserThunk)
+// These functions are kept for reference or backward compatibility
 
 export const loginUser = async (formData: LoginUserInput) => {
-    try {
-      const {email, password} = formData;
-      const response = await api.post("/users/login", { email, password});
-      if (response.data?.data?.accessToken) {
-        // Save JWT to localStorage
-        localStorage.setItem("token", response.data.data.accessToken);
-      }
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  };
-
-
-export const registerUser = async (formData: RegisterUserInput)=>{
   try {
-    const {password, email, phoneNumber, fullname, role} = formData;
-    const response = await api.post("/users/register", formData);
-    if (response.data.token) {
-      localStorage.setItem("token", response.data.token);
+    const response = await apiCall.post("/users/login", formData);
+    if (response.data?.data?.accessToken) {
+      localStorage.setItem("accessToken", response.data.data.accessToken);
     }
-    return response.data
+    return response.data.data;
   } catch (error) {
-     console.error(error);
+    console.error(error);
     throw error;
   }
-}
+};
+
+export const registerUser = async (formData: RegisterUserInput) => {
+  try {
+    const response = await apiCall.post("/users/register", formData);
+    if (response.data?.data?.accessToken) {
+      localStorage.setItem("accessToken", response.data.data.accessToken);
+    }
+    return response.data.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// Logout function
+export const logoutUser = () => {
+  localStorage.removeItem("accessToken");
+};

@@ -1,11 +1,14 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { registerUser } from "@/services/auth";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store";
+import { registerUserThunk } from "@/store/slices/authSlice";
 import { registerUserSchema } from "@trendaura/common";
 
 export default function Register() {
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
   const [formData, setFormData] = useState({
     email: "",
     phoneNumber: "",
@@ -37,12 +40,14 @@ export default function Register() {
 
     setLoading(true);
     try {
-      const data = await registerUser(validation.data);
-      if (data?.token) {
-        setSuccess("Registration successful! Redirecting to login...");
-        router.push("/login");
+      const result = await dispatch(registerUserThunk(validation.data));
+      if (result.meta.requestStatus === "fulfilled") {
+        setSuccess("Registration successful! Redirecting to home...");
+        setTimeout(() => {
+          router.push("/");
+        }, 500);
       } else {
-        setSuccess("Registration successful! You can now log in.");
+        setError(result.payload as string);
       }
 
       setFormData({

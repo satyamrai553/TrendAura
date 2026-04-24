@@ -6,13 +6,10 @@ interface ProductSectionProps{
     products:object
 }
 
-export function ProductSection({heading, products}:){
+export function ProductSection({heading, products}: ProductSectionProps){
     return(
         <>
-        <h1>Heading</h1>
-        products.items.forEach((item)=>{
-            <ProductCard title={item.title}/>
-        })
+        <h1>{heading}</h1>
         </>
     )
 }

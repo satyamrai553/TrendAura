@@ -1,11 +1,14 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { loginUser } from "@/services/auth";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store";
+import { loginUserThunk } from "@/store/slices/authSlice";
 import { loginUserSchema } from "@trendaura/common";
 
 export default function Login() {
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -17,7 +20,7 @@ export default function Login() {
     setError("");
     setSuccess("");
 
-    const validation = loginUserSchema.safeParse({email, password });
+    const validation = loginUserSchema.safeParse({ email, password });
     if (!validation.success) {
       setError("Please enter valid email and password.");
       return;
@@ -25,12 +28,14 @@ export default function Login() {
 
     setLoading(true);
     try {
-      const data = await loginUser(validation.data);
-      if (data?.data?.accessToken) {
+      const result = await dispatch(loginUserThunk(validation.data));
+      if (result.meta.requestStatus === "fulfilled") {
         setSuccess("Login successful! Redirecting...");
-        router.push("/");
+        setTimeout(() => {
+          router.push("/");
+        }, 500);
       } else {
-        setError("Invalid credentials. Please try again.");
+        setError(result.payload as string);
       }
     } catch {
       setError("Invalid credentials. Please try again.");
