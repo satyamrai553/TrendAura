@@ -28,16 +28,22 @@ export default function Login() {
 
     setLoading(true);
     try {
+      console.log("🔐 Starting login process...");
       const result = await dispatch(loginUserThunk(validation.data));
+      console.log("🔐 Login result:", result);
+      
       if (result.meta.requestStatus === "fulfilled") {
+        console.log("✅ Login successful!");
         setSuccess("Login successful! Redirecting...");
         setTimeout(() => {
           router.push("/");
         }, 500);
       } else {
+        console.error("❌ Login failed:", result.payload);
         setError(result.payload as string);
       }
-    } catch {
+    } catch (err) {
+      console.error("❌ Login error:", err);
       setError("Invalid credentials. Please try again.");
     } finally {
       setLoading(false);

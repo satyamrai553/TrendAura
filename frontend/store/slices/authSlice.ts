@@ -34,18 +34,40 @@ export const hydrateAuth = createAsyncThunk(
     try {
       const token = localStorage.getItem("accessToken");
       if (!token) {
+        console.log("ℹ️ No token in localStorage, skipping hydration");
         return null;
       }
 
+      console.log("📤 Hydrating auth - fetching current user...");
       // Fetch current user from backend
       const response = await apiCall.get("/users/current");
+      console.log("✅ Hydration successful:", response.data.data);
       return {
         user: response.data.data,
         token: token,
       };
     } catch (error: any) {
-      // Token might be expired or invalid
-      localStorage.removeItem("accessToken");
+      console.error("❌ Hydration failed:", error);
+      
+      // Only clear token on 401 (unauthorized/expired) or 403 (forbidden)
+      const status = error.response?.status;
+      if (status === 401 || status === 403) {
+        console.log("🔑 Token expired or invalid, clearing...");
+        localStorage.removeItem("accessToken");
+        return rejectWithValue("Token expired");
+      }
+      
+      // For other errors (like endpoint not found), keep the token
+      // The interceptor will still send it for other requests
+      console.log("⚠️ Hydration failed but keeping token (might be endpoint issue)");
+      const storedToken = localStorage.getItem("accessToken");
+      if (storedToken) {
+        return {
+          user: null,
+          token: storedToken,
+        };
+      }
+      
       return rejectWithValue("Failed to hydrate auth");
     }
   }
@@ -56,22 +78,29 @@ export const loginUserThunk = createAsyncThunk(
   "auth/loginUser",
   async (formData: LoginUserInput, { rejectWithValue }) => {
     try {
+      console.log("📤 Attempting login with:", formData);
       const response = await apiCall.post("/users/login", formData);
+      console.log("✅ Login response:", response.data);
+      
       const { accessToken, user } = response.data.data;
 
       if (!accessToken) {
+        console.error("❌ No access token in response");
         return rejectWithValue("No access token in response");
       }
 
       localStorage.setItem("accessToken", accessToken);
+      console.log("✅ Token saved to localStorage");
 
       return {
         user,
         token: accessToken,
       };
     } catch (error: any) {
+      console.error("❌ Login error:", error);
+      console.error("❌ Error response:", error.response?.data);
       return rejectWithValue(
-        error.response?.data?.message || "Login failed"
+        error.response?.data?.message || error.message || "Login failed"
       );
     }
   }
@@ -82,22 +111,29 @@ export const registerUserThunk = createAsyncThunk(
   "auth/registerUser",
   async (formData: RegisterUserInput, { rejectWithValue }) => {
     try {
+      console.log("📤 Attempting registration with:", formData);
       const response = await apiCall.post("/users/register", formData);
+      console.log("✅ Registration response:", response.data);
+      
       const { accessToken, user } = response.data.data;
 
       if (!accessToken) {
+        console.error("❌ No access token in response");
         return rejectWithValue("No access token in response");
       }
 
       localStorage.setItem("accessToken", accessToken);
+      console.log("✅ Token saved to localStorage");
 
       return {
         user,
         token: accessToken,
       };
     } catch (error: any) {
+      console.error("❌ Registration error:", error);
+      console.error("❌ Error response:", error.response?.data);
       return rejectWithValue(
-        error.response?.data?.message || "Registration failed"
+        error.response?.data?.message || error.message || "Registration failed"
       );
     }
   }
